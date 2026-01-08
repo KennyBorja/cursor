@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Tareas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .form-container {
+            margin-bottom: 30px;
+        }
+
+        form {
+            display: flex;
+            gap: 10px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button[type="submit"] {
+            padding: 12px 25px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button[type="submit"]:hover {
+            background: #45a049;
+        }
+
+        .tareas-container {
+            margin-top: 20px;
+        }
+
+        .tareas-container h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .tarea {
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+            background: #f9f9f9;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .tarea:hover {
+            transform: translateX(5px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .tarea.hecha {
+            border-left-color: #999;
+            opacity: 0.6;
+            text-decoration: line-through;
+            background: #e8e8e8;
+        }
+
+        .tarea-texto {
+            flex: 1;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .tarea.hecha .tarea-texto {
+            color: #666;
+        }
+
+        .completar-btn {
+            padding: 8px 15px;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.3s;
+        }
+
+        .completar-btn:hover {
+            background: #1976D2;
+        }
+
+        .acciones-tarea {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .editar-btn {
+            padding: 8px 15px;
+            background: #FF9800;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.3s;
+        }
+
+        .editar-btn:hover {
+            background: #F57C00;
+        }
+
+        .eliminar-btn {
+            padding: 8px 15px;
+            background: #f44336;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.3s;
+        }
+
+        .eliminar-btn:hover {
+            background: #d32f2f;
+        }
+
+        .form-editar {
+            display: none;
+            flex: 1;
+            gap: 8px;
+        }
+
+        .form-editar.activo {
+            display: flex;
+        }
+
+        .form-editar input {
+            flex: 1;
+            padding: 8px;
+            border: 2px solid #FF9800;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .form-editar button {
+            padding: 8px 15px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .form-editar button:hover {
+            background: #45a049;
+        }
+
+        .cancelar-btn {
+            background: #999 !important;
+        }
+
+        .cancelar-btn:hover {
+            background: #777 !important;
+        }
+
+        .sin-tareas {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-style: italic;
+        }
+
+        .sin-tareas::before {
+            content: "📝";
+            display: block;
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📝 Gestor de Tareas</h1>
+            <p>Organiza tu día de manera eficiente</p>
+        </div>
+
+        <div class="content">
+            <div class="form-container">
+                <form method="POST" action="/agregar">
+                    <input 
+                        type="text" 
+                        name="texto" 
+                        placeholder="Escribe una nueva tarea..." 
+                        required
+                        autofocus
+                    >
+                    <button type="submit">Agregar</button>
+                </form>
+            </div>
+
+            <div class="tareas-container">
+                <h2>Tareas</h2>
+                
+                {% if tareas %}
+                    {% for tarea in tareas %}
+                        <div class="tarea {% if tarea.hecho %}hecha{% endif %}" id="tarea-{{ tarea.id }}">
+                            <span class="tarea-texto" id="texto-{{ tarea.id }}">{{ tarea.texto }}</span>
+                            <form class="form-editar" id="form-editar-{{ tarea.id }}" method="POST" action="/editar/{{ tarea.id }}">
+                                <input type="text" name="texto" value="{{ tarea.texto }}" required>
+                                <button type="submit">Guardar</button>
+                                <button type="button" class="cancelar-btn" onclick="cancelarEdicion({{ tarea.id }})">Cancelar</button>
+                            </form>
+                            <div class="acciones-tarea" id="acciones-{{ tarea.id }}">
+                                {% if not tarea.hecho %}
+                                    <a href="/completar/{{ tarea.id }}" class="completar-btn">
+                                        ✓ Completar
+                                    </a>
+                                {% endif %}
+                                <button class="editar-btn" onclick="iniciarEdicion({{ tarea.id }})">
+                                    ✏️ Editar
+                                </button>
+                                <a href="/eliminar/{{ tarea.id }}" class="eliminar-btn" onclick="return confirm('¿Estás seguro de que quieres eliminar esta tarea?')">
+                                    🗑️ Eliminar
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="sin-tareas">
+                        No hay tareas. ¡Agrega una nueva!
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function iniciarEdicion(tareaId) {
+            const textoElement = document.getElementById('texto-' + tareaId);
+            const formElement = document.getElementById('form-editar-' + tareaId);
+            const accionesElement = document.getElementById('acciones-' + tareaId);
+            const inputElement = formElement.querySelector('input[name="texto"]');
+            
+            // Asegurar que el valor del input esté actualizado
+            inputElement.value = textoElement.textContent;
+            
+            textoElement.style.display = 'none';
+            accionesElement.style.display = 'none';
+            formElement.classList.add('activo');
+            inputElement.focus();
+            inputElement.select();
+        }
+
+        function cancelarEdicion(tareaId) {
+            const textoElement = document.getElementById('texto-' + tareaId);
+            const formElement = document.getElementById('form-editar-' + tareaId);
+            const accionesElement = document.getElementById('acciones-' + tareaId);
+            
+            formElement.classList.remove('activo');
+            textoElement.style.display = 'block';
+            accionesElement.style.display = 'flex';
+        }
+    </script>
+</body>
+</html>
+

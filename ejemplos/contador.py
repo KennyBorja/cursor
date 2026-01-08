@@ -21,6 +21,14 @@ class ContadorDePalabras:
                 self.texto = archivo.read()
 
     def _leer_pdf(self):
+        """
+        Extrae y devuelve el texto de todas las páginas de un archivo PDF especificado
+        por self.ruta_archivo.
+
+        Utiliza PyPDF2 para leer el archivo PDF en modo binario ('rb').
+        Recorre todas las páginas y concatena el texto extraído de cada una.
+        Devuelve el texto completo extraído del PDF como una cadena.
+        """
         texto_extraido = ""
         with open(self.ruta_archivo, "rb") as archivo_pdf:
             lector = PyPDF2.PdfReader(archivo_pdf)

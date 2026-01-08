@@ -1,0 +1,20 @@
+# Entornos virtuales
+venv/
+.venv/
+
+# Archivos de Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Archivos de entorno
+.env
+*.env
+
+# Archivos de editor/IDE
+.vscode/
+.idea/
+
+# Archivos de datos de la aplicación
+gestor_tareas/tareas.json

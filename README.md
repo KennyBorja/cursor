@@ -4,6 +4,20 @@ Este repositorio contiene una colección de ejemplos prácticos en Python que de
 
 ## 📋 Contenido
 
+## 📁 Descripción de carpetas de ejemplos
+
+- **1. ejemplos/**  
+  Contiene scripts introductorios de Python: calculadora básica, contador de palabras, análisis estadístico y FizzBuzz.
+
+- **2. analisis_datos/**  
+  Ejemplo de análisis de datos con `pandas` y archivos CSV. Incluye scripts para procesar, agrupar o visualizar datos reales, como ventas.
+
+- **3. automatizacion/**  
+  Scripts de automatización, por ejemplo: organizador automático de archivos descargados en carpetas por tipo, usando `os` y `pathlib`.
+
+- **4. notepad/**  
+  Aplicación de escritorio GUI hecha con Tkinter: bloc de notas (notepad) con área de texto, menú Archivo (abrir, guardar, guardar como), Editar (cortar/copiar/pegar), cambio de fuente y numeración de líneas.
+
 El proyecto incluye los siguientes ejemplos:
 
 ### 1. **Calculadora Básica** (`calculadora.py`)
